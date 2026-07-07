@@ -446,14 +446,14 @@ export default function App() {
         `;
       }
 
-      const emailSubject = `🎪 Shift Completion Confirmation: ${eventName} - ${dateStr}`;
+      const emailSubject = ` Shift Completion Confirmation: ${eventName} - ${dateStr}`;
       
       const plainTextBody = `Hi ${staffName},\n\nYou have successfully completed and submitted your shift for ${eventName} on ${dateStr}.\n\n--- SHIFT DETAILS ---\nLocation: ${locationName}\nClock-In: ${clockInStr}\nClock-Out: ${clockOutStr}\nTotal Breaks: ${breakMinutes} minutes\nTotal Worked Hours: ${workedHours} hours\n\n${feedback ? `--- FEEDBACK ---\nApproval Notes: ${feedback.approval}\nRating: ${feedback.rating}/5\nSuggestions: ${feedback.improvement || 'None'}\n` : ''}\nThank you for your hard work!\nBest regards,\nSavour Festival Operations Team`;
 
       const htmlContent = `
         <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
           <div style="background-color: #4f46e5; padding: 24px; text-align: center; color: white;">
-            <h2 style="margin: 0; font-size: 22px; font-weight: bold; letter-spacing: -0.5px;">🎪 Savour Food Festival</h2>
+            <h2 style="margin: 0; font-size: 22px; font-weight: bold; letter-spacing: -0.5px;"> Savour Food Festival</h2>
             <p style="margin: 4px 0 0 0; font-size: 14px; opacity: 0.9;">Shift Completion Confirmation</p>
           </div>
           <div style="padding: 24px; background-color: #ffffff;">
@@ -647,10 +647,10 @@ export default function App() {
 
     const currentURL = window.location.origin + window.location.pathname;
     const onboardingLink = `${currentURL}?onboardEmail=${encodeURIComponent(cleanEmail)}`;
-    const inviteSubject = '🎪 Join Savour Food Festival Staff Team - Onboarding Link';
+    const inviteSubject = ' Join Savour Food Festival Staff Team - Onboarding Link';
     const inviteHtml = `
       <div style="font-family: Arial, sans-serif; max-width: 620px; margin: 0 auto; color: #1f2937; line-height: 1.5;">
-        <h2>🎪 Join Savour Food Festival Staff Team</h2>
+        <h2> Join Savour Food Festival Staff Team</h2>
         <p>Hi there,</p>
         <p>You have been invited to register as a staff member on the Savour Food Festival Portal.</p>
         <p>Please click the button below to complete your onboarding, add your billing details, emergency contact details and sign the Code of Conduct.</p>
@@ -781,7 +781,7 @@ export default function App() {
           {/* Logo / Header */}
           <div className="text-center space-y-3">
             <div className="inline-flex h-16 w-16 bg-slate-800 text-white rounded-3xl items-center justify-center font-extrabold text-3xl shadow-xl border border-slate-700">
-              🎪
+              
             </div>
             <h1 className="text-3xl font-black text-white tracking-tight">
               Savour Festival Staff Onboarding
@@ -832,7 +832,7 @@ export default function App() {
       <header className="bg-white border-b border-slate-200 py-4 px-6 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="h-10 w-10 bg-slate-900 text-white rounded-xl flex items-center justify-center font-extrabold text-lg shadow-sm shadow-slate-900/15">
-            🎪
+            
           </div>
           <div className="text-center sm:text-left">
             <h1 className="text-lg font-extrabold text-slate-950 tracking-tight flex items-center gap-1.5 justify-center sm:justify-start">
