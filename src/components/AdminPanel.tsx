@@ -26,6 +26,8 @@ interface AdminPanelProps {
   onDeleteStaff?: (staffId: string) => void;
   onUpdateStaffRole?: (staffId: string, role: 'staff' | 'admin') => void;
   onInviteStaffEmail?: (email: string) => void;
+  onDeleteInvitation?: (email: string) => void;
+onResendInvitation?: (email: string) => void;
   invoices?: Invoice[];
   onApproveInvoice?: (invoiceId: string, adminId: string, adminName: string) => void;
   onMarkInvoiceAsPaid?: (invoiceId: string) => void;
@@ -86,6 +88,8 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   onDeleteStaff,
   onUpdateStaffRole,
   onInviteStaffEmail,
+  onDeleteInvitation,
+  onResendInvitation,
   invoices = [],
   onApproveInvoice,
   onMarkInvoiceAsPaid,
@@ -1734,13 +1738,37 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                       <span className="text-slate-900 font-mono truncate block" title={inv.email}>{inv.email}</span>
                       <span className="text-[10px] text-slate-400 font-medium">Invited: {new Date(inv.invitedAt).toLocaleDateString()}</span>
                     </div>
-                    <div>
-                      {inv.status === 'registered' ? (
-                        <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 text-[10px] rounded-md font-extrabold uppercase">Registered</span>
-                      ) : (
-                        <span className="px-2 py-0.5 bg-amber-50 text-amber-700 text-[10px] rounded-md font-extrabold uppercase animate-pulse">Invited</span>
-                      )}
-                    </div>
+                   <div className="flex items-center gap-2">
+                    {inv.status === 'registered' ? (
+                      <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 text-[10px] rounded-md font-extrabold uppercase">
+                        Registered
+                      </span>
+                    ) : (
+                      <span className="px-2 py-0.5 bg-amber-50 text-amber-700 text-[10px] rounded-md font-extrabold uppercase">
+                        Invited
+                      </span>
+                    )}
+                  
+                    {inv.status !== 'registered' && onResendInvitation && (
+                      <button
+                        type="button"
+                        onClick={() => onResendInvitation(inv.email)}
+                        className="px-2 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-100 rounded-md text-[10px] font-bold"
+                      >
+                        Resend
+                      </button>
+                    )}
+                  
+                    {onDeleteInvitation && (
+                      <button
+                        type="button"
+                        onClick={() => onDeleteInvitation(inv.email)}
+                        className="px-2 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-100 rounded-md text-[10px] font-bold"
+                      >
+                        Delete
+                      </button>
+                    )}
+                  </div>                  
                   </div>
                 ))}
               </div>
