@@ -620,6 +620,101 @@ export default function App() {
     saveData('fest_staff', updated);
   };
 
+  const handleDeleteInvitation = (email: string) => {
+  const cleanEmail = email.trim().toLowerCase();
+
+  if (!window.confirm(`Delete invitation for ${cleanEmail}?`)) {
+    return;
+  }
+
+  const updated = invitations.filter(
+    (inv) => inv.email.toLowerCase() !== cleanEmail
+  );
+
+  setInvitations(updated);
+  saveData('fest_invitations', updated);
+};
+
+const handleResendInvitation = (email: string) => {
+  const cleanEmail = email.trim().toLowerCase();
+
+  const existingInvitation = invitations.find(
+    (inv) => inv.email.toLowerCase() === cleanEmail
+  );
+
+  if (!existingInvitation) {
+    alert(`No invitation found for ${cleanEmail}`);
+    return;
+  }
+
+  const currentURL = window.location.origin + window.location.pathname;
+
+  const inviteSubject = 'Join Savour Food Festival Staff Team - Onboarding Link';
+
+  const inviteBody = `Hi there!
+
+You have been invited to register as a staff member on the Savour Food Festival Portal.
+
+Please click the link below to complete your onboarding, add your billing details, emergency contact details and sign the Code of Conduct:
+
+${currentURL}?onboardEmail=${encodeURIComponent(cleanEmail)}
+
+Best regards,
+Savour Festival Operations Team`;
+
+  const inviteHtml = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #111827;">
+      <h2>Join Savour Food Festival Staff Team</h2>
+      <p>Hi there,</p>
+      <p>You have been invited to register as a staff member on the Savour Food Festival Portal.</p>
+      <p>Please click the button below to complete your onboarding, add your billing details, emergency contact details and sign the Code of Conduct.</p>
+      <p>
+        <a href="${currentURL}?onboardEmail=${encodeURIComponent(cleanEmail)}" style="display: inline-block; background: #4f46e5; color: white; padding: 12px 18px; border-radius: 8px; text-decoration: none; font-weight: bold;">
+          Complete Onboarding
+        </a>
+      </p>
+      <p>If the button does not work, copy and paste this link into your browser:</p>
+      <p>
+        <a href="${currentURL}?onboardEmail=${encodeURIComponent(cleanEmail)}">
+          ${currentURL}?onboardEmail=${encodeURIComponent(cleanEmail)}
+        </a>
+      </p>
+      <p>Best regards,<br />Savour Festival Operations Team</p>
+    </div>
+  `;
+
+  if (googleToken) {
+    sendGmailNotification(googleToken, cleanEmail, inviteSubject, inviteHtml)
+      .then(() => {
+        const updated = invitations.map((inv) =>
+          inv.email.toLowerCase() === cleanEmail
+            ? {
+                ...inv,
+                invitedAt: new Date().toISOString(),
+                status: 'invited' as const
+              }
+            : inv
+        );
+
+        setInvitations(updated);
+        saveData('fest_invitations', updated);
+
+        alert(`Invitation resent to ${cleanEmail}`);
+      })
+      .catch((err) => {
+        console.error('Resend invitation failed:', err);
+        alert(
+          `Invitation could not be emailed. Copy this onboarding link manually:\n\n${currentURL}?onboardEmail=${encodeURIComponent(cleanEmail)}`
+        );
+      });
+  } else {
+    alert(
+      `Google Workspace is not connected. Copy this onboarding link manually:\n\n${currentURL}?onboardEmail=${encodeURIComponent(cleanEmail)}`
+    );
+  }
+};
+
+                                 
   // 15. Invite staff member by email
   const handleInviteStaff = async (email: string) => {
     const cleanEmail = email.trim().toLowerCase();
@@ -889,6 +984,8 @@ export default function App() {
             onDeleteStaff={handleDeleteStaff}
             onUpdateStaffRole={handleUpdateStaffRole}
             onInviteStaffEmail={handleInviteStaff}
+            onDeleteInvitation={handleDeleteInvitation}
+            onResendInvitation={handleResendInvitation}
             onApproveInvoice={handleApproveInvoice}
             onMarkInvoiceAsPaid={handleMarkInvoiceAsPaid}
             onRejectInvoice={handleRejectInvoice}
